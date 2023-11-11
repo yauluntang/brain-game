@@ -1,0 +1,22 @@
+[
+  {
+    "id": "TERRAIN_VOID",
+    "index": 0,
+    "textureBaseIndex": 0
+  },
+  {
+    "id": "TERRAIN_DIRT",
+    "index": 1,
+    "textureBaseIndex": 0
+  },
+  {
+    "id": "TERRAIN_GRASS",
+    "index": 2,
+    "textureBaseIndex": 224
+  },
+  {
+    "id": "TERRAIN_WATER",
+    "index": 3,
+    "textureBaseIndex": 448
+  }
+]
