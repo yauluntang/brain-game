@@ -45,8 +45,11 @@ export default class MenuScene extends Phaser.Scene {
     this.load.audio('correct', ['assets/sound/correct.mp3', 'assets/sound/correct.ogg']);
 
     this.load.image('tile', 'assets/images/tile.png');
+    this.load.image('timer', 'assets/images/timer.png');
     this.load.image('human-head', 'assets/images/human-head.png');
-    this.load.image('matching-tile', 'assets/images/matching-tile.png');
+    this.load.image('logo', 'assets/images/logo.png');
+    this.load.image('matching', 'assets/images/matching.png');
+    this.load.image('number1234', 'assets/images/number1234.png');
   }
 
 
@@ -54,7 +57,7 @@ export default class MenuScene extends Phaser.Scene {
     const logo = this.add.image(600, 300, 'human-head');
     logo.setScale(0.5)
 
-    const matchingTile = this.add.image(600, 800, 'matching-tile')
+    const matchingTile = this.add.image(600, 800, 'matching')
     matchingTile.setScale(0.5)
     matchingTile.setInteractive({ pixelPerfect: true })
     matchingTile.on('pointerdown', () => {
@@ -62,9 +65,11 @@ export default class MenuScene extends Phaser.Scene {
     });
 
 
-    const numberTile = this.add.image(600, 1000, 'matching-tile')
+    const numberTile = this.add.image(600, 1000, 'number1234')
     numberTile.setScale(0.5)
     numberTile.setInteractive({ pixelPerfect: true })
+
+
     numberTile.on('pointerdown', () => {
       this.scene.start('NumberTileScene', { level: 1 })
     });

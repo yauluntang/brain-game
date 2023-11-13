@@ -52,14 +52,13 @@ export default class MatchingTileScene extends Phaser.Scene {
   startTime: number = new Date().getTime();
   endTime: number = new Date().getTime();
   flippedAllImages = false;
-  timerText?: Phaser.GameObjects.Text;
   won = false;
 
   preload(): void {
     for (let i = 0; i < fruitImages.length; i++) {
       this.load.image(`fruit_${i}`, `assets/images/${fruitImages[i]}.png`);
     }
-    this.load.json('leveldata', 'assets/config/matchingTileLevels.json');
+    this.load.json('matchingTileLevels', 'assets/config/matchingTileLevels.json');
   }
 
   victory = (): void => {
@@ -102,7 +101,7 @@ export default class MatchingTileScene extends Phaser.Scene {
   }
 
   restart = (level: number): void => {
-    const configData = this.cache.json.get('leveldata');
+    const configData = this.cache.json.get('matchingTileLevels');
     this.won = false;
     this.flippedAllImages = false;
     this.solved = 0;
@@ -130,7 +129,7 @@ export default class MatchingTileScene extends Phaser.Scene {
           newTileObject.setScale(0.35);
           this.matchingTileObjects.push(newTileObject);
           this.add.existing(newTileObject);
-          newTileObject.setPosition(x * tileWidth + tileWidth / 2, y * tileHeight + tileHeight / 2 + 100)
+          newTileObject.setPosition(x * tileWidth + tileWidth / 2, y * tileHeight + tileHeight / 2 + 200)
           i++;
         }
         position++;
@@ -170,7 +169,7 @@ export default class MatchingTileScene extends Phaser.Scene {
     }
 
     if (this.flippedAllImages) {
-      this.timerText?.setText(`${Math.round((this.endTime - this.startTime) / 10) / 100}`)
+      this.topBottomBar?.setTimerText(`${Math.round((this.endTime - this.startTime) / 10) / 100}`)
     }
 
   }

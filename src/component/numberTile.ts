@@ -33,7 +33,7 @@ export class NumberTileObject extends Phaser.GameObjects.Container {
       this.clicking();
     });
 
-    this.statusText = this.scene.add.text(0, 0, `${this.tileId}`, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#000', fontSize: '200px' });
+    this.statusText = this.scene.add.text(0, -10, `${this.tileId}`, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#000', fontSize: '200px' });
     this.statusText.setScale(0.5)
     this.statusText.setOrigin(0.5);
     this.add(this.statusText)
@@ -51,9 +51,7 @@ export class NumberTileObject extends Phaser.GameObjects.Container {
   }
 
   clicking = (): void => {
-    console.log('clicking')
     if (this.clickCallback) {
-      console.log(this.tileId)
       this.clickCallback(this.tileId)
     }
   }

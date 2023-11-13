@@ -41,12 +41,11 @@ export default class NumberTileScene extends Phaser.Scene {
 
   preload(): void {
 
-    this.load.json('leveldata', 'assets/config/numberTileLevels.json');
+    this.load.json('numberTileLevels', 'assets/config/numberTileLevels.json');
 
 
   }
   init(data: LevelData): void {
-
     this.level = data.level;
   }
 
@@ -60,15 +59,17 @@ export default class NumberTileScene extends Phaser.Scene {
       numberTile?.setStatus(STATUS_CORRECT);
       this.solved++;
       this.currentNumber++;
+      this.topBottomBar?.setCorrectText(this.solved);
       this.topBottomBar?.playCorrectSound();
 
-      if (this.currentNumber >= this.config.max) {
+      if (this.currentNumber > this.config.max) {
         this.victory();
       }
     }
     else {
       this.topBottomBar?.playWrongSound();
       this.incorrect++;
+      this.topBottomBar?.setIncorrectText(this.incorrect);
       numberTile?.setStatus(STATUS_INCORRECT);
     }
   }
@@ -81,12 +82,18 @@ export default class NumberTileScene extends Phaser.Scene {
   restart = (level: number): void => {
     this.currentNumber = 1;
 
+    this.solved = 0;
+    this.incorrect = 0;
+
     this.won = false;
-    const configData = this.cache.json.get('leveldata');
+    const configData = this.cache.json.get('numberTileLevels');
     this.config = configData[level]
     if (!this.config) {
       return;
     }
+
+    this.tile.length = 0;
+    this.numberTile.length = 0;
 
     const numberPerLayer = this.config.columns * this.config.rows;
     const maxNumber = numberPerLayer * (this.config.layers)
@@ -100,15 +107,20 @@ export default class NumberTileScene extends Phaser.Scene {
       shuffleArray(this.tile[layer])
     }
 
-    for (let i = 0; i < maxNumber; i++) {
-      const numberTile = new NumberTileObject(this, i, 0, this.tileClicked)
-      this.numberTile.push(numberTile)
-      numberTile.setScale(0.7)
-      this.add.existing(numberTile);
-    }
 
     const tileWidth = totalWidth / this.config.columns;
     const tileHeight = (totalHeight - 600) / this.config.rows;
+
+    for (let i = 0; i < maxNumber; i++) {
+      const numberTile = new NumberTileObject(this, i, 0, this.tileClicked)
+      this.numberTile.push(numberTile)
+      numberTile.setScale(1)
+      if (tileWidth < 300) {
+        numberTile.setScale(tileWidth / 300)
+      }
+      this.add.existing(numberTile);
+    }
+
 
     let position = 0;
     for (let layer = this.config.layers - 1; layer >= 0; layer--) {
@@ -145,7 +157,8 @@ export default class NumberTileScene extends Phaser.Scene {
     if (!this.won) {
       this.endTime = new Date().getTime();
     }
-    this.timerText?.setText(`${Math.round((this.endTime - this.startTime) / 10) / 100}`)
+    this.topBottomBar?.setTimerText(`${Math.round((this.endTime - this.startTime) / 10) / 100}`)
+
   }
 
 }

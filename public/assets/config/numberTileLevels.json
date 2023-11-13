@@ -2,6 +2,31 @@
   "1": {
     "rows": 3,
     "columns": 3,
-    "layers": 2
+    "layers": 1,
+    "max": 9
+  },
+  "2": {
+    "rows": 3,
+    "columns": 3,
+    "layers": 3,
+    "max": 27
+  },
+  "3": {
+    "rows": 4,
+    "columns": 4,
+    "layers": 3,
+    "max": 48
+  },
+  "4": {
+    "rows": 4,
+    "columns": 4,
+    "layers": 4,
+    "max": 64
+  },
+  "5": {
+    "rows": 5,
+    "columns": 5,
+    "layers": 4,
+    "max": 100
   }
 }

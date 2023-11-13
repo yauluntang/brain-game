@@ -17,7 +17,7 @@ const entry = [`${paths.src}/index.ts`, `${paths.src}/css/styles.css`];
  * Set output file name and path.
  */
 const output = {
-  publicPath: '/',
+  publicPath: '',
   path: paths.dist,
   filename: config.JS_FILE_OUTPUT,
 };
