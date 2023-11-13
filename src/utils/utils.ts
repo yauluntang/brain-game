@@ -17,9 +17,12 @@ export const shuffleArray = (array: Array<number>): void => {
 export const STATUS_UNFLIPPED = 0
 export const STATUS_FLIPPING = 1
 export const STATUS_FLIPPED = 2
+export const STATUS_UNFLIPPING = 3
+export const STATUS_UNFLIPPING_WAIT = 4
 
 
-
+export const STATUS_CORRECT = 1
+export const STATUS_INCORRECT = 2
 
 
 

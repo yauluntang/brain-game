@@ -1,4 +1,4 @@
-import { STATUS_FLIPPED, STATUS_FLIPPING, STATUS_UNFLIPPED } from '@/utils/utils';
+import { STATUS_FLIPPED, STATUS_FLIPPING, STATUS_UNFLIPPED, STATUS_UNFLIPPING, STATUS_UNFLIPPING_WAIT } from '@/utils/utils';
 import 'phaser';
 
 
@@ -7,8 +7,12 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
   picture?: Phaser.GameObjects.Image;
   backImage?: Phaser.GameObjects.Image;
   checkImage?: Phaser.GameObjects.Image;
+  statusText?: Phaser.GameObjects.Text;
   imageId = 0;
   tileId = 0;
+  nextStatus: number | null = null;
+  nextStatusTime = 0;
+
 
   constructor(scene: Phaser.Scene, imageId: number, tileId: number, status: number, cardFlipCallback: (tileId: number) => void) {
 
@@ -16,6 +20,7 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
     this.scene = scene;
     this.imageId = imageId;
     this.tileId = tileId;
+    this.status = status;
 
     this.picture = this.scene.add.image(0, 0, `fruit_${imageId}`);
     this.picture.setInteractive({ pixelPerfect: true })
@@ -38,6 +43,21 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
     this.backImage.on('pointerdown', () => {
       cardFlipCallback(this.tileId);
     });
+
+
+    this.statusText = this.scene.add.text(0, 0, '', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#000', fontSize: '120px' });
+    this.add(this.statusText)
+  }
+
+  update(): void {
+
+    //this.statusText?.setText(`${this.status}`);
+
+    if (this.nextStatusTime < new Date().getTime() && this.nextStatus !== null) {
+      const status = this.nextStatus;
+      this.nextStatus = null;
+      this.setStatus(status);
+    }
   }
 
 
@@ -48,7 +68,12 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
     if (previousStatus !== status) {
       this.status = status;
 
-      if (previousStatus === STATUS_FLIPPING && status === STATUS_UNFLIPPED) {
+      if (status === STATUS_UNFLIPPING_WAIT) {
+        this.nextStatusTime = new Date().getTime() + 1000;
+        this.nextStatus = STATUS_UNFLIPPING;
+      }
+
+      if (status === STATUS_UNFLIPPING) {
 
         this.picture?.setScale(1, 1);
 
@@ -76,6 +101,8 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
             }
           }
         });
+        this.nextStatusTime = new Date().getTime() + 500;
+        this.nextStatus = STATUS_UNFLIPPED;
       }
 
       if (status === STATUS_FLIPPED) {
@@ -86,13 +113,13 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
           targets: this.checkImage,
           props: {
             scale: {
-              value: 1.1,
+              value: 1.2,
               duration: 400
             },
             alpha: {
               value: 1,
               duration: 400,
-              delay: 100
+              delay: 500
             }
           }
         });
@@ -102,7 +129,7 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
           props: {
             alpha: {
               value: 0,
-              duration: 100,
+              duration: 200,
               delay: 1100
             }
           }
@@ -138,8 +165,6 @@ export class MatchingTileObject extends Phaser.GameObjects.Container {
           }
         });
       }
-      //this.backImage?.setVisible(!flipped);
-      //this.picture?.setVisible(flipped);
       return;
     }
   }
